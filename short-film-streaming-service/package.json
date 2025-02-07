@@ -1,0 +1,35 @@
+{
+  "name": "short-film-streaming",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc",
+    "serve": "node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Antony-R/short-film-streaming.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Antony-R/short-film-streaming/issues"
+  },
+  "homepage": "https://github.com/Antony-R/short-film-streaming#readme",
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/fluent-ffmpeg": "^2.1.27",
+    "@types/node": "^22.10.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "^7.15.0",
+    "express": "^4.21.2",
+    "firebase-admin": "^13.1.0",
+    "fluent-ffmpeg": "^2.1.3"
+  }
+}
