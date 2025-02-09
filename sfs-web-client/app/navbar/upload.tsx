@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Fragment } from "react";
+import React from "react";
 import { uploadVideo } from "../firebase/functions";
 
 import styles from "./upload.module.css";

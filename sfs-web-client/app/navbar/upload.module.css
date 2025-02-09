@@ -1,20 +1,30 @@
 .uploadInput {
-    display: none;/* Hide the default input */
+    display: none;
 }
 
 .uploadButton {
-    display: flex; /* Use Flexbox to center the text */
-    justify-content: center;/* Center text horizontally */
-    align-items: center;/* Center text vertically */
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;/* Make it circular */
-    color: black;/* Color of the text */
-    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto; /* Remove fixed width */
+    height: auto; /* Remove fixed height */
+    border-radius: 0; /* Remove rounded corners */
+    color: #007bff; /* Blue color (match sign-in button or your brand) */
+    border: 2px solid #007bff; /* Blue border */
     cursor: pointer;
-    padding: 0.4em;
+    padding: 8px 16px; /* Adjust padding as needed */
+    background-color: transparent; /* Transparent background */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Smooth transitions */
 }
 
 .uploadButton:hover {
-    background-color: rgb(230, 230, 230);
+    background-color: #007bff; /* Blue background on hover */
+    color: white; /* White icon on hover */
+    border-color: #007bff; /* Keep border color consistent */
+}
+
+/* Optional: Style the icon inside the button */
+.uploadButton svg { /* Or .uploadButton i, .uploadButton img, etc. depending on your icon */
+    width: 20px; /* Adjust icon size as needed */
+    height: 20px;
 }

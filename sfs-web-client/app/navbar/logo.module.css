@@ -1,0 +1,42 @@
+/* logo.module.css */
+.logoContainer {
+    display: flex;
+    align-items: center; /* Vertically center icon and text */
+    text-decoration: none; /* Remove underline from link */
+    color: inherit; /* Inherit color from parent (navbar) */
+}
+
+.logoText {
+    color: #444;
+    font-family: var(--font-big-shoulders-display);/* Example font - choose yours */
+    font-weight: 1000;
+    font-size: 1.3rem; /* Adjust size as needed */
+    margin-left: 0.5rem; /* Space between icon and text */
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.logoIcon {
+    width: 2rem; /* Adjust size as needed */
+    height: 2rem;
+    stroke: #28a745; /* Black outline */
+    stroke-width: 1.5; /* Adjust outline thickness as needed */
+}
+
+/* Optional: If you want the outline to be slightly outside the fill */
+.logoIcon {
+    stroke-linecap: round; /* optional - Round the line */
+    stroke-linejoin: round; /* optional - Round the joint */
+    /* other styles */
+}
+
+/* Responsive adjustments (example) */
+@media (max-width: 768px) {
+    .logoText {
+        font-size: 1rem; /* Smaller text on mobile */
+    }
+
+    .logoIcon {
+        width: 1.5rem; /* Smaller icon on mobile */
+        height: 1.5rem;
+    }
+}

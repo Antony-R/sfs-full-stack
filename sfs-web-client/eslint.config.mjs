@@ -14,3 +14,11 @@ const eslintConfig = [
 ];
 
 export default eslintConfig;
+
+module.exports = {
+  // Your existing ESLint configuration
+  rules: {
+      // Other rules
+      '@typescript-eslint/no-explicit-any': 'off'
+  },
+};

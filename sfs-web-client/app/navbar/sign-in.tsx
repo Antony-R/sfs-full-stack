@@ -2,7 +2,7 @@
 
 import { Fragment } from "react";
 
-import styles from "./sign-in.module.css";
+import styles from "./navbar.module.css";
 
 import { signInWithGoogle, signOut } from "../firebase/firebase";
 import { User } from "firebase/auth";
@@ -16,11 +16,11 @@ export default function SignIn({ user }: SignInProps) {
         <Fragment>
             {
                 user ? (
-                    <button className={styles.signin} onClick={signOut}>
+                    <button className={styles.navbarButton} onClick={signOut}>
                         Sign Out
                     </button>
                 ) : (
-                    <button className={styles.signin} onClick={signInWithGoogle}>
+                    <button className={styles.navbarButton} onClick={signInWithGoogle}>
                         Sign In
                     </button>
                 )

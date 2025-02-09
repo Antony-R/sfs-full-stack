@@ -1,0 +1,36 @@
+.page {
+    display: flex;
+    justify-content: flex-start;
+    margin: 10px;
+}
+
+.thumbnail {
+    width: 18rem; /* Use rem for width */
+    height: 10.125rem; /* Use rem for height (16:9 aspect ratio) */
+    object-fit: cover;
+    border-radius: 10px;
+    margin: 10px;
+    transition: transform 0.2s;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, border 0.2s; /* Add border transition */
+}
+
+.thumbnail:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 3px solid #0f0; /* Neon green border */
+    /* Or any other neon color you prefer */
+}
+
+@media (max-width: 768px) {
+    .main {
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); /* Adjust for smaller screens */
+        grid-gap: 10px;
+    }
+
+    .thumbnail {
+        width: 14rem; /* Adjust width and height for smaller screens */
+        height: 7.875rem; /* Maintain 16:9 ratio */
+        border-radius: 4px;
+    }
+}

@@ -1,17 +1,19 @@
 'use client'
 
-import Image from "next/image";
 import styles from "./navbar.module.css";
-import Link from "next/link";
 import SignIn from "./sign-in";
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import { onAuthStateChangedHelper } from "../firebase/firebase";
 import Upload from "./upload";
+import Logo from "./logo";
+import MyUploadsButton from "./myuploads-button";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
     //Init user state
     const [user, setUser] = useState<User | null>(null);
+    const pathname = usePathname();
     
     useEffect(() => {
         const unsubscribe = onAuthStateChangedHelper((user) => {
@@ -23,14 +25,23 @@ export default function Navbar() {
     });
 
     return (
-        <nav className={styles.nav}>
-            <Link href="/">
-                <Image src="/blob.svg" alt="Logo " width={90} height={20}/>
-            </Link>
-            {
-                user && <Upload />
-            }
-            <SignIn user={user}/>
+        <nav className={styles.navbar}>
+            <div className={styles.navbarContent}>
+                <div className={styles.navbarLeft}>
+                    <Logo />
+                </div>
+                <div className={styles.navbarCenter}>
+                    {
+                        user && <Upload />
+                    }
+                </div>
+                <div className={styles.navbarRight}>
+                    {
+                        user && pathname != '/myuploads' && <MyUploadsButton />
+                    }
+                    <SignIn user={user} />
+                </div>
+            </div>
         </nav>
     ); 
 }

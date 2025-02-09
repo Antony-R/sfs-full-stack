@@ -64,6 +64,11 @@ Re deploy in Cloud Run
 
 # Add getVideos cloud function
 
+## deploy web client 
+create repo
+docker build -t asia-south2-docker.pkg.dev/short-film-streaming/sfs-web-client/sfs-web-client-image .
+docker push asia-south2-docker.pkg.dev/short-film-streaming/sfs-web-client/sfs-web-client-image
+
 # Tech Stack
 1. Frontend - React and Next JS
 2. Backend - Express

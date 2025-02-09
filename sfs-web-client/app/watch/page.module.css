@@ -1,0 +1,41 @@
+/* video.module.css */
+
+.video-container {
+    width: 60%; /* Adjust as needed */
+    max-width: 960px; /* Adjust as needed */
+    margin: 20px auto;
+    position: relative; /* For absolute positioning of controls */
+}
+
+.video {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Optional: Style the video in fullscreen mode */
+.video:fullscreen {
+    width: 100%;
+    height: 100%;
+}
+
+.video:-webkit-full-screen {
+    width: 100%;
+    height: 100%;
+}
+
+.video:-moz-full-screen {
+    width: 100%;
+    height: 100%;
+}
+
+.video:-ms-fullscreen {
+    width: 100%;
+    height: 100%;
+}
+
+/* Basic page styles */
+.title {
+    text-align: left;
+    margin-bottom: 20px;
+}

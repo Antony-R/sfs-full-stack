@@ -1,10 +1,50 @@
-.nav {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-  }
-  
-  .nav img {
-    margin-left: auto;
-  }
-  
+.navbar {
+  background-color: #f8f9fa;
+  color: #343a40;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.navbarContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbarLeft {
+  display: flex;
+  align-items: center;
+}
+
+.navbarCenter {
+  display: flex;
+  align-items: center;
+}
+
+.navbarRight {
+  display: flex;
+  align-items: center;
+}
+
+.navbarButton {
+  display: inline-block;
+  border: 2px solid #007bff; /* Blue border (change this) */
+  padding: 8px 16px; /* Adjusted padding - match upload button */
+  border-radius: 0; /* Remove rounded corners */ 
+  font-family: var(--font-manrope);
+  font-size: 14px;
+  margin: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: transparent;
+  color: #007bff; /* Blue text (change this) */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}.navbarButton:hover {
+  background-color: #007bff; /* Blue background on hover (change this) */
+  color: white;
+}
+

@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Big_Shoulders_Display, Big_Shoulders_Text, Manrope, Newsreader } from "next/font/google";
 import "./globals.css";
 import Navbar from "./navbar/navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+});
+
+const bigShouldersDisplay = Big_Shoulders_Display({
+  variable: "--font-big-shoulders-display",
   subsets: ["latin"],
 });
 
@@ -25,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${newsreader.variable} ${manrope.variable} ${bigShouldersDisplay.variable}`}>
         <Navbar />
         {children}
       </body>

@@ -1,14 +1,23 @@
-import {getFunctions, httpsCallable} from "firebase/functions";
-
-const functions = getFunctions();
+import {httpsCallable} from "firebase/functions";
+import {functions} from "./firebase";
 
 const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
+const getVideosCloudFunction = httpsCallable(functions, 'getVideos');
+const getMyUploadsCloudFunction = httpsCallable(functions, 'getMyUploads');
 
-export async function uploadVideo(file: File){
+export interface Video {
+    id?: string,
+    uid?: string,
+    fileName?: string,
+    status?: 'processing' | 'processed',
+    title?: string,
+    description?: string
+}
+
+export async function uploadVideo(file: File): Promise<Response>{
     const response: any = await generateUploadUrl({
         fileExtension: file.name.split('.').pop()
     });
-
     //Upload the file using signed URL
     const uploadResult = await fetch(response?.data?.url, {
         method: 'PUT',
@@ -18,4 +27,14 @@ export async function uploadVideo(file: File){
         },
     });
     return uploadResult;
+}
+
+export async function getVideos() {
+    const response = await getVideosCloudFunction();
+    return response.data as Video[];
+}
+
+export async function getMyUploads() {
+    const response = await getMyUploadsCloudFunction();
+    return response.data as Video[];
 }
