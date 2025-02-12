@@ -5,10 +5,10 @@ import SignIn from "./sign-in";
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import { onAuthStateChangedHelper } from "../firebase/firebase";
-import Upload from "./upload";
 import Logo from "./logo";
 import MyUploadsButton from "./myuploads-button";
 import { usePathname } from "next/navigation";
+import UploadButton from "./upload-button";
 
 export default function Navbar() {
     //Init user state
@@ -32,7 +32,7 @@ export default function Navbar() {
                 </div>
                 <div className={styles.navbarCenter}>
                     {
-                        user && <Upload />
+                        user && <UploadButton />
                     }
                 </div>
                 <div className={styles.navbarRight}>

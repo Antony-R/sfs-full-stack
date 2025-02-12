@@ -1,35 +1,74 @@
-'use client';
+'use client'
 
-import React from "react";
-import { uploadVideo } from "../firebase/functions";
+import { useState } from 'react';
+import { submitVideoMeta, uploadVideo } from '../firebase/functions';
 
-import styles from "./upload.module.css";
+import styles from './upload.module.css';
 
-export default function Upload() {
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.item(0);
-        if (file) {
-            handleUpload(file);
-        }
+export default function Upload({ onClose }: any) {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [videoFile, setVideoFile] = useState<File | undefined | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.item(0);
+    if (file) {
+      setVideoFile(file);
+    }
+  }
+
+  const handleUpload = async (file: File) => {
+    try {
+      const videoId = await uploadVideo(file);
+      console.log(`File uploaded sucessfully: ${videoId}`);
+      return videoId;
+    } catch (error) {
+      alert(`Failed to upload file: ${error}`);
+    }
+  }
+
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+
+    if (!title || !description || !videoFile) {
+      setError("All fields are required.");
+      return;
     }
 
-    const handleUpload = async (file: File) => {
-        try {
-            const response = await uploadVideo(file);
-            alert(`File uploaded successfully. Response: ${JSON.stringify(response)}`);
-        } catch (error) {
-            alert(`Failed to upload file: ${error}`);
-        }
-    }
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
 
-    return (
-        <>
-            <input id="upload" className={styles.uploadInput} type="file" accept="video/*" onChange={handleFileChange}></input>
-            <label htmlFor="upload" className={styles.uploadButton}>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" />
-                </svg>
-            </label>
-        </>
-    )
+    handleUpload(videoFile)
+      .then(videoId => {
+        submitVideoMeta(videoId, formData);
+        onClose();
+      })
+      .catch(error => {
+        console.error('Upload failed:', error);
+        setError("Upload failed. Please try again.");
+      });
+  };
+
+  return (
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalContent}>
+        <h2>Upload Video</h2>
+        <form onSubmit={handleSubmit}>
+          {error && <p className={styles.errorMessage}>{error}</p>}
+          <label htmlFor="title" className={styles.label}>Title:</label><br />
+          <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)} required className={styles.input} /><br /><br />
+  
+          <label htmlFor="description" className={styles.label}>Description:</label><br />
+          <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} required className={styles.textarea} /><br /><br />
+  
+          <input type="file" id="upload" accept="video/*" onChange={handleFileChange} required className={styles.fileInput} /><br /><br />
+  
+          <button type="submit" className={styles.uploadButton}>Upload</button>
+          <button type="button" onClick={onClose} className={styles.cancelButton}>Cancel</button>
+        </form>
+      </div>
+    </div>
+  );
 }

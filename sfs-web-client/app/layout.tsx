@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Big_Shoulders_Display, Big_Shoulders_Text, Manrope, Newsreader } from "next/font/google";
+import { Big_Shoulders_Display, Jost, Manrope, Rubik } from "next/font/google";
 import "./globals.css";
 import Navbar from "./navbar/navbar";
 
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
+const rubik = Rubik({
+  variable: "--font-rubik",
   subsets: ["latin"],
 });
 
@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${newsreader.variable} ${manrope.variable} ${bigShouldersDisplay.variable}`}>
+      <body className={`${rubik.variable} ${manrope.variable} ${bigShouldersDisplay.variable}`}>
         <Navbar />
         {children}
       </body>

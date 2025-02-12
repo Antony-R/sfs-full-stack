@@ -4,6 +4,7 @@ import {functions} from "./firebase";
 const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
 const getVideosCloudFunction = httpsCallable(functions, 'getVideos');
 const getMyUploadsCloudFunction = httpsCallable(functions, 'getMyUploads');
+const submitVideoMetaFunction = httpsCallable(functions, 'submitVideoMeta');
 
 export interface Video {
     id?: string,
@@ -14,7 +15,7 @@ export interface Video {
     description?: string
 }
 
-export async function uploadVideo(file: File): Promise<Response>{
+export async function uploadVideo(file: File): Promise<any> {
     const response: any = await generateUploadUrl({
         fileExtension: file.name.split('.').pop()
     });
@@ -26,7 +27,10 @@ export async function uploadVideo(file: File): Promise<Response>{
             'Content-Type': file.type
         },
     });
-    return uploadResult;
+    console.log(`Upload Result: ${uploadResult}`);
+    
+    const videoId = response?.data?.fileName.split('.')[0];
+    return videoId;
 }
 
 export async function getVideos() {
@@ -37,4 +41,13 @@ export async function getVideos() {
 export async function getMyUploads() {
     const response = await getMyUploadsCloudFunction();
     return response.data as Video[];
+}
+
+export async function submitVideoMeta(videoId: string, formData: FormData) {
+    const video: Video = {
+        title: formData.get('title')?.toString(),
+        description: formData.get('description')?.toString()
+    }
+    const response = await submitVideoMetaFunction({videoId, video});
+    console.log(`Video metadata update result: ${response.data}`);
 }

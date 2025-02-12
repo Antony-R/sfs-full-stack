@@ -100,3 +100,41 @@ export const getMyUploads = onCall({maxInstances: 1}, async (request) => {
     await firestore.collection(videoCollectionId).where("uid", "==", uid).get();
   return snapshot.docs.map((doc) => doc.data());
 });
+
+export const submitVideoMeta = onCall({maxInstances: 1}, async (request) => {
+  if (!request.auth) {
+    throw new functions.https.HttpsError(
+      "failed-precondition",
+      "The function must be called while authenticated."
+    );
+  }
+  const data = request.data;
+  const videoId = data.videoId;
+  const video: Video = data.video;
+
+  // Validate input
+  if (!videoId || typeof videoId !== "string") {
+    throw new functions.https
+      .HttpsError("invalid-argument", "Video ID must be a string.");
+  }
+  if (!video || typeof video !== "object") {
+    throw new functions.https
+      .HttpsError("invalid-argument", "Video data must be an object.");
+  }
+  if (video.title && typeof video.title !== "string") {
+    throw new functions.https
+      .HttpsError("invalid-argument", "Video title must be a string.");
+  }
+  if (video.description && typeof video.description !== "string") {
+    throw new functions.https
+      .HttpsError("invalid-argument", "Video description must be a string.");
+  }
+
+  // Update the video document in Firestore
+  await firestore
+    .collection(videoCollectionId)
+    .doc(videoId)
+    .set(video, {merge: true}); // Use merge to avoid overwriting existing data
+
+  return {success: true, message: "Video metadata updated successfully."};
+});
