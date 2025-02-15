@@ -1,13 +1,12 @@
 'use client'
 
-// pages/myuploads.js (or wherever you handle /myuploads)
 import { useEffect, useState } from 'react';
 import { redirect } from 'next/navigation';
 import { onAuthStateChangedHelper } from '../firebase/firebase';
 import { User } from 'firebase/auth';
 import { getMyUploads, Video } from '../firebase/functions';
 
-// ... other imports
+import styles from "./page.module.css";
 
 export default function MyUploads() {
     const [user, setUser] = useState<User | null>(null);
@@ -43,15 +42,30 @@ export default function MyUploads() {
             {
                 isLoading ? <h1>Loading ...</h1> :
                     <>
-                        <h1>My Uploads</h1>
                         {uploads.length === 0 ? (
                             <div>No uploads found.</div>
                         ) : (
-                            uploads.map((videoMeta) => (
-                                <div key={videoMeta.id}>
-                                    {videoMeta.fileName}
-                                </div>
-                            ))
+                            <div className={styles.container}>
+                            <h1>My Uploads</h1>
+                            <table className={styles.uploadsTable}>
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Description</th>
+                                        {/*<th>File Name</th>  Optional: Include file name if needed */}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {uploads.map((videoMeta) => (
+                                        <tr key={videoMeta.id}>
+                                            <td>{videoMeta.title}</td>
+                                            <td>{videoMeta.description}</td>
+                                            {/*<td>{videoMeta.fileName}</td> Optional: Include file name if needed */}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            </div>
                         )}
                     </>
             }

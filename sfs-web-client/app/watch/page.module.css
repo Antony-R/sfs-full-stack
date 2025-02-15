@@ -1,41 +1,113 @@
-/* video.module.css */
-
-.video-container {
-    width: 60%; /* Adjust as needed */
-    max-width: 960px; /* Adjust as needed */
-    margin: 20px auto;
-    position: relative; /* For absolute positioning of controls */
-}
-
-.video {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* Optional: Style the video in fullscreen mode */
-.video:fullscreen {
-    width: 100%;
-    height: 100%;
-}
-
-.video:-webkit-full-screen {
-    width: 100%;
-    height: 100%;
-}
-
-.video:-moz-full-screen {
-    width: 100%;
-    height: 100%;
-}
-
-.video:-ms-fullscreen {
-    width: 100%;
-    height: 100%;
-}
-
-/* Basic page styles */
-.title {
-    text-align: left;
+.videContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 60%; /* Or any percentage you want for the container */
+    max-width: 700px; /* Optional max-width for the container */
+    margin: 20px auto; /* Keep the centering */
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    font-size: 2em;
     margin-bottom: 20px;
-}
+    color: #333;
+  }
+  
+  .video-wrapper {
+    position: relative;
+    width: 100%; /* Now 100% of the *smaller* parent */
+    max-width: 100%; /* Remove or adjust this if needed */
+    aspect-ratio: 16 / 9;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 0;
+    object-fit: cover; /* Use 'contain' if you don't want to crop the video */
+  }
+  
+  .video-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 4px solid #333;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.3) inset;
+    pointer-events: none;
+    box-sizing: border-box;
+  }
+  
+  .likeContainer {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .likeButton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-right: 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .likeButton:hover {
+    background-color: #45a049;
+  }
+  
+  .likeButton:disabled {
+    background-color: #ccc;
+    cursor: default;
+  }
+  
+  .likeCount {
+    font-size: 1.2em;
+    color: #555;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .videContainer {
+      width: 95%;
+      padding: 15px;
+    }
+  
+    .title {
+      font-size: 1.5em;
+      margin-bottom: 15px;
+    }
+  
+    .video-wrapper {
+      width: 90%; /* Adjust width for smaller screens */
+      max-width: 500px; /* Adjust max-width for smaller screens */
+      aspect-ratio: 16 / 9; /* Maintain aspect ratio */
+    }
+  
+    .likeButton {
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+  
+    .likeCount {
+      font-size: 1em;
+    }
+  }

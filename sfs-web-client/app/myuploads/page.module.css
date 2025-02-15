@@ -1,0 +1,86 @@
+.container {
+    width: 90%; /* Adjust as needed */
+    max-width: 1200px; /* Set a maximum width */
+    margin: 20px auto; /* Center the container */
+    padding: 20px; /* Add some padding around the content */
+}
+
+.container h1 {
+    text-align: left; /* Center the heading */
+    margin-bottom: 20px;
+    color: #fff; /* White text for heading */
+}
+
+.uploadsTable {
+    width: 100%; /* Table takes full width of its container */
+    border-collapse: collapse;
+    table-layout: fixed; /* Optional: For consistent column widths */
+}
+
+.uploadsTable th,
+.uploadsTable td {
+    border: none;
+    padding: 15px; /* Increased padding */
+    text-align: left;
+    color: white;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.uploadsTable th {
+    background-color: #3498db; /* Blue for headers */
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 18px;
+    border-bottom: 2px solid #2980b9;
+}
+
+.uploadsTable tr {
+    border-bottom: 1px solid #555; /* Row separators */
+    height: 50px; /* Minimum row height */
+}
+
+.uploadsTable tr:nth-child(even) {
+    background-color: transparent;
+}
+
+.uploadsTable tr:hover {
+    background-color: transparent;
+    /* Optional hover effect: */
+    /* background-color: rgba(255, 255, 255, 0.05); */
+}
+
+.uploadsTable td {
+    background-color: transparent;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 10px; /* Reduce padding on smaller screens */
+    }
+
+    .container h1 {
+        font-size: 1.5em; /* Smaller heading on smaller screens */
+        margin-bottom: 15px;
+    }
+
+    .uploadsTable th,
+    .uploadsTable td {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    .uploadsTable th {
+        padding: 12px;
+    }
+
+    .uploadsTable tr {
+        height: auto; /* Remove fixed height on smaller screens */
+    }
+}
