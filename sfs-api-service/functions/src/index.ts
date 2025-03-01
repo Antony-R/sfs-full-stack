@@ -80,6 +80,7 @@ export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
 });
 
 export const getVideos = onCall({maxInstances: 1}, async () => {
+  // TODO: change the limit
   const snapshot =
     await firestore.collection(videoCollectionId).limit(10).get();
   return snapshot.docs.map((doc) => doc.data());
@@ -137,4 +138,11 @@ export const submitVideoMeta = onCall({maxInstances: 1}, async (request) => {
     .set(video, {merge: true}); // Use merge to avoid overwriting existing data
 
   return {success: true, message: "Video metadata updated successfully."};
+});
+
+export const getVideoMeta = onCall({maxInstances: 1}, async (request) => {
+  const videoId = request.data.id;
+  const snapshot =
+    await firestore.collection(videoCollectionId).doc(videoId).get();
+  return snapshot.data();
 });

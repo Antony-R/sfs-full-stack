@@ -31,12 +31,12 @@
 }
 
 .uploadsTable th {
-    background-color: #3498db; /* Blue for headers */
+    background-color: #28a745; /* Blue for headers */
     color: white;
     font-weight: bold;
     text-transform: uppercase;
     padding: 18px;
-    border-bottom: 2px solid #2980b9;
+    border-bottom: 2px solid white;
 }
 
 .uploadsTable tr {
@@ -56,6 +56,44 @@
 
 .uploadsTable td {
     background-color: transparent;
+    vertical-align: middle;
+}
+
+.playIcon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    vertical-align: middle; /* Align the icon with the text */
+}
+
+.link {
+    display: inline-block; /* Change from flex to inline-block */
+    position: relative; /* Required for absolute positioning of ::after */
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    padding-bottom: 2px; /* Add space for the underline */
+}
+
+.link:hover {
+    color: white; /* Keep text white on hover */
+}
+
+/* Underline animation on hover */
+.link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0; /* Position the underline at the bottom */
+    width: 0; /* Start with no width */
+    height: 2px; /* Thickness of the underline */
+    background-color: #28a745; /* Green underline color */
+    transition: width 0.3s ease; /* Smooth transition for the underline */
+}
+
+.link:hover::after {
+    width: 100%; /* Expand the underline to full width */
 }
 
 /* Responsive adjustments */

@@ -56,9 +56,9 @@
   }
   
   .likeButton {
-    background-color: #4CAF50;
+    background-color: var(--like-color, #4CAF50);
     border: none;
-    color: white;
+    color: var(--like-text-color, white);
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
@@ -71,12 +71,17 @@
   }
   
   .likeButton:hover {
-    background-color: #45a049;
+    background-color: #45a049; /* Darker green for "like" hover */
   }
   
   .likeButton:disabled {
     background-color: #ccc;
     cursor: default;
+  }
+  
+  /* Add hover for the unlike state */
+  .likeButton[style*="--like-color: #D3D3D3"]:hover {
+    background-color: #C0C0C0; /* Slightly darker grey for "unlike" hover */
   }
   
   .likeCount {

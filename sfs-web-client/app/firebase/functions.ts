@@ -5,6 +5,7 @@ const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
 const getVideosCloudFunction = httpsCallable(functions, 'getVideos');
 const getMyUploadsCloudFunction = httpsCallable(functions, 'getMyUploads');
 const submitVideoMetaFunction = httpsCallable(functions, 'submitVideoMeta');
+const getVideoMetaFunction = httpsCallable(functions, 'getVideoMeta');
 
 export interface Video {
     id?: string,
@@ -50,4 +51,9 @@ export async function submitVideoMeta(videoId: string, formData: FormData) {
     }
     const response = await submitVideoMetaFunction({videoId, video});
     console.log(`Video metadata update result: ${response.data}`);
+}
+
+export async function getVideoMeta(videoId: string) {
+    const response = await getVideoMetaFunction({id: videoId});
+    return response.data as Video;
 }

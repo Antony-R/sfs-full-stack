@@ -1,10 +1,11 @@
 'use client'
 
 import { redirect, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import styles from "./page.module.css";
 import { getLikesCount, isVideoLikedByUser, likeVideo } from "./like-video";
 import { useAuth } from "../AuthContext";
+import { getVideoMeta, Video } from "../firebase/functions";
 
 export default function Watch() {
     return (
@@ -21,21 +22,25 @@ function ShowVideo() {
     const [liked, setLiked] = useState(false);
     const [likeCount, setLikeCount] = useState(0);
     const [likeStatusLoading, setLikeStatusLoading] = useState(true);
-
-    const fileName = useSearchParams().get('v');
-    if (!fileName) {
+    const [videoMeta, setVideoMeta] = useState<Video | null>(null);
+    
+    const videoId = useSearchParams().get('v');
+    if (!videoId) {
         redirect("/");
     }
-    const videoId = fileName.split('.')[0].replace('processed-', '');
 
     async function updateLikesCount() {
-        const count = await getLikesCount(videoId);
-        setLikeCount(count);
+        if (videoId) {
+            const count = await getLikesCount(videoId);
+            setLikeCount(count);
+        }
     }
 
     async function checkUserLiked() {
-        const isLiked = await isVideoLikedByUser(videoId);
-        setLiked(isLiked);
+        if (videoId) {
+            const isLiked = await isVideoLikedByUser(videoId);
+            setLiked(isLiked);
+        }
     }
 
     async function fetchLikesData() {  //Combined function to fetch all data
@@ -46,8 +51,35 @@ function ShowVideo() {
         setLikeStatusLoading(false);
     }
 
-    // to prevent copying the video link by right click
+    async function fetchVideoMeta() {
+        if (!videoId) {
+            console.warn("videoId is not set. Cannot fetch video metadata.");
+            return; // Early return if videoId is missing
+        }
+
+        try {
+            const meta = await getVideoMeta(videoId);
+
+            if (!meta) {
+                throw new Error(`Video metadata not found for videoId: ${videoId}`);
+            }
+
+            setVideoMeta(meta);
+        } catch (error) {
+            console.log("Error fetching video metadata:", error);
+            alert("Failed to fetch video metadata. Please try again.");
+            redirect('/');
+        }
+    }
+
     useEffect(() => {
+        if (loading) {
+            return; //fetch data only once
+        }
+        fetchVideoMeta();
+        fetchLikesData();
+
+        //prevent copying the video link
         const video = document.querySelector('video');
         if (video) {
             video.addEventListener('contextmenu', (event) => {
@@ -55,7 +87,6 @@ function ShowVideo() {
             });
         }
 
-        fetchLikesData();
         return () => { // Clean up the listener when the component unmounts
             if (video) {
                 video.removeEventListener('contextmenu', (event) => {
@@ -63,10 +94,10 @@ function ShowVideo() {
                 });
             }
         };
-    }, [user, loading]); // Empty dependency array ensures this runs only once
+    }, [user, loading]); // Dependencies
 
     const handleLike = async () => {
-        if (!user || loading) {
+        if (!user || loading || !videoId) {
             return;
         }
 
@@ -83,12 +114,16 @@ function ShowVideo() {
         {
             loading ? <h1>Loading ...</h1> :
             <div className={styles.videContainer}>
-                <h1 className={styles.title}>Watch Page</h1>
-                <video controls src={videoPrefix + fileName} className={styles.video} controlsList="nodownload" />
+                <h1 className={styles.title}>{videoMeta?.title}</h1>
+                <video controls src={videoPrefix + videoMeta?.fileName} className={styles.video} controlsList="nodownload" />
 
                 <div className={styles.likeContainer}>
                     <button
                         className={styles.likeButton}
+                        style={{
+                            '--like-color': liked ? '#D3D3D3' : undefined,
+                            '--like-text-color': liked ? '#333' : undefined,
+                        } as React.CSSProperties}
                         onClick={handleLike}
                         disabled={likeStatusLoading || !user} // Disable while loading or not logged in
                     >
