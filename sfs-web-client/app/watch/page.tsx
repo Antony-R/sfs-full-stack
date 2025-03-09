@@ -5,7 +5,8 @@ import React, { Suspense, useEffect, useState } from "react";
 import styles from "./page.module.css";
 import { getLikesCount, isVideoLikedByUser, likeVideo } from "./like-video";
 import { useAuth } from "../AuthContext";
-import { getVideoMeta, Video } from "../firebase/functions";
+import { getUserMeta, getVideoMeta, Video } from "../firebase/functions";
+import { UserInfo } from "firebase/auth";
 
 export default function Watch() {
     return (
@@ -23,6 +24,7 @@ function ShowVideo() {
     const [likeCount, setLikeCount] = useState(0);
     const [likeStatusLoading, setLikeStatusLoading] = useState(true);
     const [videoMeta, setVideoMeta] = useState<Video | null>(null);
+    const [videoUploader, setVideoUploader] = useState<UserInfo | null>(null);
     
     const videoId = useSearchParams().get('v');
     if (!videoId) {
@@ -60,10 +62,12 @@ function ShowVideo() {
         try {
             const meta = await getVideoMeta(videoId);
 
-            if (!meta) {
+            if (!meta || !meta.uid) {
                 throw new Error(`Video metadata not found for videoId: ${videoId}`);
             }
 
+            const videoUploaderMeta = await getUserMeta(meta.uid);
+            setVideoUploader(videoUploaderMeta);
             setVideoMeta(meta);
         } catch (error) {
             console.log("Error fetching video metadata:", error);
@@ -117,19 +121,25 @@ function ShowVideo() {
                 <h1 className={styles.title}>{videoMeta?.title}</h1>
                 <video controls src={videoPrefix + videoMeta?.fileName} className={styles.video} controlsList="nodownload" />
 
-                <div className={styles.likeContainer}>
-                    <button
-                        className={styles.likeButton}
-                        style={{
-                            '--like-color': liked ? '#D3D3D3' : undefined,
-                            '--like-text-color': liked ? '#333' : undefined,
-                        } as React.CSSProperties}
-                        onClick={handleLike}
-                        disabled={likeStatusLoading || !user} // Disable while loading or not logged in
-                    >
-                        {likeStatusLoading ? 'Loading...' : (liked ? 'Unlike' : 'Like')}
-                    </button>
-                    <span className={styles.likeCount}>{likeCount}</span>
+                <div className={styles.bottomContainer}>
+                    <div className={styles.likeContainer}>
+                        <button
+                            className={styles.likeButton}
+                            style={{
+                                '--like-color': liked ? '#D3D3D3' : undefined,
+                                '--like-text-color': liked ? '#333' : undefined,
+                            } as React.CSSProperties}
+                            onClick={handleLike}
+                            disabled={likeStatusLoading || !user} // Disable while loading or not logged in
+                        >
+                            {likeStatusLoading ? 'Loading...' : (liked ? 'Unlike' : 'Like')}
+                        </button>
+                        <span className={styles.likeCount}>{likeCount}</span>
+                    </div>
+
+                    <div className={styles.uploadedBy}>
+                        Uploaded by <span className={styles.uploader}>{videoUploader?.displayName}</span>
+                    </div>
                 </div>
             </div>
         }

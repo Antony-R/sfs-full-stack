@@ -10,7 +10,7 @@
 
 import * as functions from "firebase-functions/v1";
 import {initializeApp} from "firebase-admin/app";
-import {Firestore} from "firebase-admin/firestore";
+import {FieldValue, Firestore, Timestamp} from "firebase-admin/firestore";
 import * as logger from "firebase-functions/logger";
 import {Storage} from "@google-cloud/storage";
 import {onCall} from "firebase-functions/v2/https";
@@ -29,6 +29,7 @@ const firestore = new Firestore();
 const storage = new Storage();
 
 const videoCollectionId = "videos";
+const usersCollectionId = "users";
 
 export interface Video {
     id?: string,
@@ -36,7 +37,8 @@ export interface Video {
     fileName?: string,
     status?: "processing" | "processed",
     title?: string,
-    description?: string
+    description?: string,
+    timestamp?: Timestamp
 }
 
 export const createUser = functions.auth.user().onCreate((user) => {
@@ -44,6 +46,7 @@ export const createUser = functions.auth.user().onCreate((user) => {
     uid: user.uid,
     email: user.email,
     photoUrl: user.photoURL,
+    displayName: user.displayName,
   };
 
   firestore.collection("users").doc(user.uid).set(userInfo);
@@ -79,11 +82,39 @@ export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
   return {url, fileName};
 });
 
-export const getVideos = onCall({maxInstances: 1}, async () => {
-  // TODO: change the limit
-  const snapshot =
-    await firestore.collection(videoCollectionId).limit(10).get();
-  return snapshot.docs.map((doc) => doc.data());
+export const getVideos = onCall({maxInstances: 1}, async (request) => {
+  const lastVisibleId = request.data.lastVisibleId;
+  const limit = 10; // Number of videos per page
+  // TODO: check if orderBy is required for consistent pagination
+
+  try {
+    let query = firestore.collection(videoCollectionId).limit(limit);
+
+    if (lastVisibleId) {
+      const lastVisibleDoc = await firestore
+        .collection(videoCollectionId)
+        .doc(lastVisibleId)
+        .get();
+      if (lastVisibleDoc.exists) {
+        query = query.startAfter(lastVisibleDoc);
+      } else {
+        // last visible doc doesnt exist, return empty array.
+        return {videos: [], lastVisibleId: null};
+      }
+    }
+
+    const snapshot = await query.get();
+
+    const videos = snapshot.docs.map((doc) => (doc.data()));
+
+    const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+    const newLastVisibleId = lastVisible ? lastVisible.id : null;
+
+    return {videos, lastVisibleId: newLastVisibleId};
+  } catch (error) {
+    console.error("Error fetching videos:", error);
+    return {error: "An error occurred"};
+  }
 });
 
 
@@ -135,7 +166,8 @@ export const submitVideoMeta = onCall({maxInstances: 1}, async (request) => {
   await firestore
     .collection(videoCollectionId)
     .doc(videoId)
-    .set(video, {merge: true}); // Use merge to avoid overwriting existing data
+    .set({...video, timestamp: FieldValue.serverTimestamp()}, {merge: true});
+  // Use merge to avoid overwriting existing data
 
   return {success: true, message: "Video metadata updated successfully."};
 });
@@ -144,5 +176,12 @@ export const getVideoMeta = onCall({maxInstances: 1}, async (request) => {
   const videoId = request.data.id;
   const snapshot =
     await firestore.collection(videoCollectionId).doc(videoId).get();
+  return snapshot.data();
+});
+
+export const getUserMeta = onCall({maxInstances: 1}, async (request) => {
+  const userId = request.data.id;
+  const snapshot =
+    await firestore.collection(usersCollectionId).doc(userId).get();
   return snapshot.data();
 });

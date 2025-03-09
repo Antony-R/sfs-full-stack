@@ -1,6 +1,6 @@
 import {credential} from "firebase-admin";
 import {initializeApp} from "firebase-admin/app";
-import {Firestore} from "firebase-admin/firestore";
+import {Firestore, Timestamp} from "firebase-admin/firestore";
 
 initializeApp({credential: credential.applicationDefault()});
 const admin = require("firebase-admin");
@@ -16,6 +16,7 @@ export interface Video {
     status?: 'processing' | 'processed',
     title?: string,
     description?: string
+    timestamp?: Timestamp
 }
 
 async function getVideo(videoId: string) {

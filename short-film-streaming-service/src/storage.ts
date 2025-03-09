@@ -1,9 +1,6 @@
 import { Storage } from "@google-cloud/storage";
-import { upload } from "@google-cloud/storage/build/cjs/src/resumable-upload";
-import { dir } from "console";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
-import { resolve } from "path";
 
 const storage = new Storage();
 

@@ -2,56 +2,97 @@
     display: flex;
     justify-content: flex-start;
     margin: 10px;
-}
-
-.thumbnail {
-    width: 18rem; /* Use rem for width */
-    height: 10.125rem; /* Use rem for height (16:9 aspect ratio) */
+  }
+  
+  .thumbnail {
+    width: 18rem;
+    height: 10.125rem;
     object-fit: cover;
     border-radius: 10px;
     position: relative;
     z-index: 1;
     margin: 10px;
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, border 0.2s; /* Add border transition */
-}
-
-.thumbnail:hover {
+  }
+  
+  .thumbnail:hover {
     transform: scale(1.05);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     border: 3px solid #0f0; /* Neon green border */
-    /* Or any other neon color you prefer */
-}
+  }
   
-.text {
+  .text {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    /* color: white; /* Bright White */
-     color: #28a745; /* Neon Green 
-    /* color: cyan; /* Cyan */
-    /* color: magenta; /* Magenta */
-    /* color: yellow; /* bright yellow */
-    /* color: orange; /* bright orange */
+    color: #28a745; /* Neon Green */
     text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
-               1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
+      1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
     font-size: 24px;
     font-weight: bold;
     text-align: center;
     z-index: 2;
-}
-
-@media (max-width: 768px) {
-    .main {
-        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); /* Adjust for smaller screens */
-        grid-gap: 10px;
+  }
+  
+  /* New styles for Load More button and container */
+  
+  .videoList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start; /* Aligned to the start */
+    margin: 10px; /* added margin to match page margins */
+  }
+  
+  .loadMoreContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    width: 100%;
+  }
+  
+  .loadMoreButton {
+    background-color: #28a745; /* Neon Green background */
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .loadMoreButton:hover {
+    background-color: #218838; /* Slightly darker neon green on hover */
+  }
+  
+  .loading,
+  .noMoreVideos {
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+  }
+  
+  /* Responsive adjustments */
+  
+  @media (max-width: 768px) {
+    .videoList {
+      justify-content: center; /* center on mobile */
     }
-
+  
     .thumbnail {
-        width: 14rem; /* Adjust width and height for smaller screens */
-        height: 7.875rem; /* Maintain 16:9 ratio */
-        border-radius: 4px;
+      width: 14rem;
+      height: 7.875rem;
+      border-radius: 4px;
     }
-}
+  
+    .text {
+      font-size: 20px; /* Adjust text size for smaller screens */
+    }
+  
+    .loadMoreButton {
+      font-size: 0.9rem; /* Adjust button font size for smaller screens */
+    }
+  }

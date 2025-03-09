@@ -1,11 +1,14 @@
 import {httpsCallable} from "firebase/functions";
 import {functions} from "./firebase";
+import {UserInfo} from "firebase/auth";
+import {Timestamp} from "firebase/firestore";
 
 const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
 const getVideosCloudFunction = httpsCallable(functions, 'getVideos');
 const getMyUploadsCloudFunction = httpsCallable(functions, 'getMyUploads');
 const submitVideoMetaFunction = httpsCallable(functions, 'submitVideoMeta');
 const getVideoMetaFunction = httpsCallable(functions, 'getVideoMeta');
+const getUserMetaFunction = httpsCallable(functions, 'getUserMeta');
 
 export interface Video {
     id?: string,
@@ -14,6 +17,7 @@ export interface Video {
     status?: 'processing' | 'processed',
     title?: string,
     description?: string
+    timestamp?: Timestamp
 }
 
 export async function uploadVideo(file: File): Promise<any> {
@@ -34,9 +38,9 @@ export async function uploadVideo(file: File): Promise<any> {
     return videoId;
 }
 
-export async function getVideos() {
-    const response = await getVideosCloudFunction();
-    return response.data as Video[];
+export async function getVideos(lastVideoId: string | null) {
+    const response = await getVideosCloudFunction({lastVisibleId: lastVideoId});
+    return response.data;
 }
 
 export async function getMyUploads() {
@@ -56,4 +60,9 @@ export async function submitVideoMeta(videoId: string, formData: FormData) {
 export async function getVideoMeta(videoId: string) {
     const response = await getVideoMetaFunction({id: videoId});
     return response.data as Video;
+}
+
+export async function getUserMeta(userId: string) {
+    const response = await getUserMetaFunction({id: userId});
+    return response.data as UserInfo;
 }
