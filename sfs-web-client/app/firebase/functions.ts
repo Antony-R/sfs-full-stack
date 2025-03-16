@@ -9,6 +9,7 @@ const getMyUploadsCloudFunction = httpsCallable(functions, 'getMyUploads');
 const submitVideoMetaFunction = httpsCallable(functions, 'submitVideoMeta');
 const getVideoMetaFunction = httpsCallable(functions, 'getVideoMeta');
 const getUserMetaFunction = httpsCallable(functions, 'getUserMeta');
+const getOrCreateChatFunction = httpsCallable(functions, 'getOrCreateChat');
 
 export interface Video {
     id?: string,
@@ -65,4 +66,9 @@ export async function getVideoMeta(videoId: string) {
 export async function getUserMeta(userId: string) {
     const response = await getUserMetaFunction({id: userId});
     return response.data as UserInfo;
+}
+
+export async function getOrCreateChat(participantUid: string) {
+    const response = await getOrCreateChatFunction({partnerUid: participantUid});
+    return response.data;
 }

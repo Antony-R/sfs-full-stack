@@ -1,0 +1,86 @@
+.chatsListContainer {
+    max-width: 800px;
+    width: 100%;
+    margin: 40px auto;
+    padding: 0;
+    background-color: transparent;
+    box-shadow: none;
+    color: white;
+  }
+  
+  .chatsListTitle {
+    text-align: left;
+    margin-bottom: 40px;
+    font-size: 2em;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid #404040;
+    padding-bottom: 15px;
+    color: #fff;
+  }
+  
+  .chatsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .chatItem {
+    border-bottom: 1px solid #383838;
+    padding: 1.5rem;
+    transition: background-color 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .chatItem:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+  
+  .chatItemContent {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .chatItem:hover {
+    background-color: rgba(255, 255, 255, 0.08); /* Simple background change on hover */
+  }
+  
+  .otherUserName {
+    font-weight: 600;
+    font-size: 1.2em;
+    color: #66bb6a;
+    margin-bottom: 8px;
+  }
+  
+  .lastMessage {
+    color: #ccc;
+    font-size: 0.95em;
+    line-height: 1.4;
+  }
+
+  .noChatsMessage{
+    text-align: center;
+    margin-top: 20px;
+    color: grey;
+    }
+  
+  /* Add a subtle animation for loading text */
+  @keyframes pulse {
+    0% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.6;
+    }
+  }
+  
+  .loading {
+    animation: pulse 1.5s infinite;
+  }

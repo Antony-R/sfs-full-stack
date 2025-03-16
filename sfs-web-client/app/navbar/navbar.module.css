@@ -40,6 +40,7 @@
   margin: 0.5rem;
   font-weight: 500;
   cursor: pointer;
+  text-decoration: none;
   background-color: transparent;
   color: #007bff; /* Blue text (change this) */
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -48,3 +49,17 @@
   color: white;
 }
 
+@media (max-width: 768px) {
+  .navbarContent {
+      overflow-x: auto; /* Enable horizontal scrolling */
+      white-space: nowrap; /* Prevent wrapping */
+      padding: 10px; /* Add padding */
+  }
+
+  .navbarLeft,
+  .navbarCenter,
+  .navbarRight {
+      display: inline-block; /* Make items inline */
+      margin-right: 10px; /* Add spacing between items */
+  }
+}

@@ -3,7 +3,7 @@ import styles from "./navbar.module.css";
 
 export default function MyUploadsButton() {
     return (
-        <Link href={`myuploads`}>
+        <Link href={`/myuploads`}>
             <button className={styles.navbarButton}>
                 My Uploads
             </button>

@@ -13,7 +13,7 @@ import {initializeApp} from "firebase-admin/app";
 import {FieldValue, Firestore, Timestamp} from "firebase-admin/firestore";
 import * as logger from "firebase-functions/logger";
 import {Storage} from "@google-cloud/storage";
-import {onCall} from "firebase-functions/v2/https";
+import {CallableRequest, onCall} from "firebase-functions/v2/https";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -41,6 +41,16 @@ export interface Video {
     timestamp?: Timestamp
 }
 
+const validateAuthentication = (request: CallableRequest<any>) => {
+  // Check if the user is authenticated
+  if (!request.auth) {
+    throw new functions.https.HttpsError(
+      "failed-precondition",
+      "The function must be called while authenticated."
+    );
+  }
+};
+
 export const createUser = functions.auth.user().onCreate((user) => {
   const userInfo = {
     uid: user.uid,
@@ -54,23 +64,53 @@ export const createUser = functions.auth.user().onCreate((user) => {
   return;
 });
 
-const rawVideoBucketName = "sfs-raw-videos";
+export const getOrCreateChat = onCall({maxInstances: 1}, async (request) => {
+  validateAuthentication(request);
+
+  const currentUid = request.auth?.uid;
+  const partnerUid = request.data.partnerUid;
+
+  if (!currentUid || !partnerUid) {
+    throw new Error("Missing currentUid or partnerUid");
+  }
+
+  const participants = [currentUid, partnerUid].sort();
+
+  // Create a new document with an auto-generated ID
+  const chatRef = firestore.collection("chats").doc();
+
+  // Check if a chat with the same participants already exists
+  const existingChats = await firestore
+    .collection("chats")
+    .where("participants", "==", participants)
+    .get();
+
+  if (!existingChats.empty) {
+    // If a chat exists, return its ID
+    return existingChats.docs[0].id;
+  }
+
+  // If no chat exists, create the new one and return its ID
+  await chatRef.set({
+    participants,
+    lastMessage: "",
+    timestamp: FieldValue.serverTimestamp(),
+  });
+
+  return chatRef.id;
+});
+
+const RAW_VIDEO_BUCKET_NAME = "sfs-raw-videos";
 
 export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
-  // Check if the user is authenticated
-  if (!request.auth) {
-    throw new functions.https.HttpsError(
-      "failed-precondition",
-      "The function must be called while authenticated."
-    );
-  }
+  validateAuthentication(request);
 
   const auth = request.auth;
   const data = request.data;
-  const bucket = storage.bucket(rawVideoBucketName);
+  const bucket = storage.bucket(RAW_VIDEO_BUCKET_NAME);
 
   // Generate a unique filename
-  const fileName = `${auth.uid}-${Date.now()}.${data.fileExtension}`;
+  const fileName = `${auth?.uid}-${Date.now()}.${data.fileExtension}`;
 
   // Get v4 signed URL for uploading file
   const [url] = await bucket.file(fileName).getSignedUrl({
@@ -117,29 +157,19 @@ export const getVideos = onCall({maxInstances: 1}, async (request) => {
   }
 });
 
-
+// TODO: change this to GET
 export const getMyUploads = onCall({maxInstances: 1}, async (request) => {
-  // Check if the user is authenticated
-  if (!request.auth) {
-    throw new functions.https.HttpsError(
-      "failed-precondition",
-      "The function must be called while authenticated."
-    );
-  }
+  validateAuthentication(request);
 
-  const uid = request.auth.uid;
+  const uid = request?.auth?.uid;
   const snapshot =
     await firestore.collection(videoCollectionId).where("uid", "==", uid).get();
   return snapshot.docs.map((doc) => doc.data());
 });
 
 export const submitVideoMeta = onCall({maxInstances: 1}, async (request) => {
-  if (!request.auth) {
-    throw new functions.https.HttpsError(
-      "failed-precondition",
-      "The function must be called while authenticated."
-    );
-  }
+  validateAuthentication(request);
+
   const data = request.data;
   const videoId = data.videoId;
   const video: Video = data.video;

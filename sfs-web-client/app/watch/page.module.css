@@ -1,145 +1,146 @@
-.videContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 60%; /* Or any percentage you want for the container */
-    max-width: 700px; /* Optional max-width for the container */
-    margin: 20px auto; /* Keep the centering */
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #f8f8f8;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.videoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+  max-width: 700px;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #f8f8f8;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 0;
+  object-fit: cover;
+}
+
+.bottomContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.uploadedBy {
+  color: #555; /* A softer, more refined color */
+  font-size: 0.95rem; /* Slightly larger for better readability */
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Adjusted gap for spacing */
+}
+
+.uploader {
+  color: #007bff; /* Keep the blue for emphasis */
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.uploader:hover {
+  color: #0056b3;
+}
+
+.likeContainer {
+  display: flex;
+  align-items: center;
+}
+
+.likeButton {
+  background-color: var(--like-color, #4CAF50);
+  border: none;
+  color: var(--like-text-color, white);
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.likeButton:hover {
+  background-color: #45a049;
+}
+
+.likeButton:disabled {
+  background-color: #ccc;
+  cursor: default;
+}
+
+.likeButton[style*="--like-color: #D3D3D3"]:hover {
+  background-color: #C0C0C0;
+}
+
+.likeCount {
+  font-size: 1.2em;
+  color: #555;
+}
+
+.chatButton {
+  background-color: #e0f2fe; /* Light blue background for a subtle button */
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px; /* Slightly adjusted padding */
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  line-height: 1;
+}
+
+.chatButton:hover {
+  background-color: #b3d9ff; /* Darker shade on hover */
+}
+
+.chatIcon {
+  width: 16px;
+  height: 16px;
+  color: #007bff; /* Match the uploader name color */
+}
+
+.chatButton:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+  .videContainer {
+    width: 95%;
+    padding: 15px;
   }
-  
+
   .title {
-    font-size: 2em;
-    margin-bottom: 20px;
-    color: #333;
+    font-size: 1.5em;
+    margin-bottom: 15px;
   }
-  
+
   .video-wrapper {
-    position: relative;
-    width: 100%; /* Now 100% of the *smaller* parent */
-    max-width: 100%; /* Remove or adjust this if needed */
+    width: 90%;
+    max-width: 500px;
     aspect-ratio: 16 / 9;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  }
-  
-  .video {
-    width: 100%;
-    height: 100%;
-    display: block;
-    border-radius: 0;
-    object-fit: cover; /* Use 'contain' if you don't want to crop the video */
-  }
-  
-  .video-wrapper::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 4px solid #333;
-    border-radius: 6px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.3) inset;
-    pointer-events: none;
-    box-sizing: border-box;
   }
 
-  .bottomContainer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 20px;
-    width: 100%;
-  }
-
-  .uploadedBy {
-    color: #333; /* Darker, more neutral color */
-    font-weight: 500; /* Slightly lighter bold */
-    font-size: 0.9rem; /* Slightly smaller font */
-    display: flex; /* Use flexbox for alignment */
-    align-items: center;
-    gap: 0.3rem; /* Space between "Uploaded by" and username */
-  }
-  
-  .uploader {
-    color: #007bff; /* A cool blue for the username */
-    font-weight: 600; /* Slightly bolder username */
-    text-decoration: none; /* Remove underline if it's a link */
-    transition: color 0.3s ease; /* Smooth color transition */
-  }
-  
-  .uploader:hover {
-    color: #0056b3; /* Darker blue on hover */
-  }
-  
-  .likeContainer {
-    display: flex;
-    align-items: center;
-  }
-  
   .likeButton {
-    background-color: var(--like-color, #4CAF50);
-    border: none;
-    color: var(--like-text-color, white);
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin-right: 10px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
+    padding: 8px 16px;
+    font-size: 14px;
   }
-  
-  .likeButton:hover {
-    background-color: #45a049; /* Darker green for "like" hover */
-  }
-  
-  .likeButton:disabled {
-    background-color: #ccc;
-    cursor: default;
-  }
-  
-  /* Add hover for the unlike state */
-  .likeButton[style*="--like-color: #D3D3D3"]:hover {
-    background-color: #C0C0C0; /* Slightly darker grey for "unlike" hover */
-  }
-  
+
   .likeCount {
-    font-size: 1.2em;
-    color: #555;
+    font-size: 1em;
   }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .videContainer {
-      width: 95%;
-      padding: 15px;
-    }
-  
-    .title {
-      font-size: 1.5em;
-      margin-bottom: 15px;
-    }
-  
-    .video-wrapper {
-      width: 90%; /* Adjust width for smaller screens */
-      max-width: 500px; /* Adjust max-width for smaller screens */
-      aspect-ratio: 16 / 9; /* Maintain aspect ratio */
-    }
-  
-    .likeButton {
-      padding: 8px 16px;
-      font-size: 14px;
-    }
-  
-    .likeCount {
-      font-size: 1em;
-    }
-  }
+}
