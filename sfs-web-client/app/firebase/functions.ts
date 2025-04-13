@@ -41,8 +41,8 @@ export async function uploadVideo(file: File): Promise<any> {
     return videoId;
 }
 
-export async function getVideos(lastVideoId: string | null) {
-    const response = await getVideosCloudFunction({lastVisibleId: lastVideoId});
+export async function getVideos(lastVideoId: string | null, searchValue: string | null) {
+    const response = await getVideosCloudFunction({lastVisibleId: lastVideoId, searchStr: searchValue});
     return response.data;
 }
 

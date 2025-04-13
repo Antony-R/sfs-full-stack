@@ -189,6 +189,7 @@ export default function Upload({ onClose }: UploadProps) {
             onChange={(e) => setDescription(e.target.value)}
             required
             className={styles.textarea}
+            placeholder="Consider this your one take. No 'undo / edit' button for these fields."
           />
           <br />
           <br />

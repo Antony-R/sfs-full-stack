@@ -128,13 +128,24 @@ export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
 export const getVideos = onCall({maxInstances: 1}, async (request) => {
   const statusFilter = "processed";
   const lastVisibleId = request.data.lastVisibleId;
+  const searchStr = request.data.searchStr;
   const limit = 10; // Number of videos per page
   // TODO: check if orderBy is required for consistent pagination
 
   try {
     let query = firestore.collection(videoCollectionId)
       .where("status", "==", statusFilter)
-      .limit(limit);
+      .orderBy("timestamp", "desc");
+
+    if (searchStr) {
+      query = query.where("title", ">=", searchStr)
+        .where("title", "<=", searchStr + "\uf8ff");
+    }
+
+    if (!searchStr) {
+      // no pagination for search
+      query = query.limit(limit);
+    }
 
     if (lastVisibleId) {
       const lastVisibleDoc = await firestore
