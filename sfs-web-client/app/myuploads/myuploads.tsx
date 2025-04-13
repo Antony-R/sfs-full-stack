@@ -1,53 +1,47 @@
 'use client'
 
 import { useEffect, useState } from 'react';
-import { redirect } from 'next/navigation';
-import { onAuthStateChangedHelper } from '../firebase/firebase';
-import { User } from 'firebase/auth';
 import { getMyUploads, Video } from '../firebase/functions';
 
-import styles from "./page.module.css";
+import styles from "./myuploads.module.css";
 import Link from 'next/link';
+import { useAuth } from '../AuthContext';
 
 export default function MyUploads() {
-    const [user, setUser] = useState<User | null>(null);
+    const {user, loading} = useAuth();
     const [uploads, setUploads] = useState<Video[] | []>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isListLoading, setIsListLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChangedHelper(async (user) => {
-            setUser(user);
-            setIsLoading(true);
+        const fetchUploads = async () => {
+            setIsListLoading(true);
             if (user) {
-                // Now you can pass the authenticated user when calling the Firebase function
                 try {
-                    const result = await getMyUploads(); // Call the function here
+                    const result = await getMyUploads();
                     setUploads(result);
                 } catch (error) {
                     console.error("Error fetching uploads:", error);
-                    // Handle error, maybe show an error message
+                } finally {
+                    setIsListLoading(false);
                 }
             } else {
-                // Redirect or show a message when not authenticated
-                console.log("User not authenticated");
-                redirect('/');
+                setIsListLoading(false);
+                setUploads([]);
             }
-            setIsLoading(false);
-        });
-    
-        return () => unsubscribe(); // Cleanup subscription
-    }, []);
+        };
+
+        fetchUploads();
+    }, [user]);
     
     return (
         <div>
             {
-                isLoading ? <h1>Loading ...</h1> :
+                isListLoading ? <p>Loading ...</p> :
                     <>
                         {uploads.length === 0 ? (
                             <div>No uploads found.</div>
                         ) : (
                             <div className={styles.container}>
-                            <h1>My Uploads</h1>
                             <table className={styles.uploadsTable}>
                                 <thead>
                                     <tr>

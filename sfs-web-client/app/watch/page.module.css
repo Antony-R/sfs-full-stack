@@ -1,10 +1,11 @@
+/* /watch/page.module.css */
+
 .videoContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 60%;
+  width: 100%;
   max-width: 700px;
-  margin: 20px auto;
   padding: 20px;
   border-radius: 8px;
   background-color: #f8f8f8;
@@ -113,34 +114,130 @@
   color: #007bff; /* Match the uploader name color */
 }
 
-.chatButton:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
-}
-
 @media (max-width: 768px) {
   .videContainer {
-    width: 95%;
-    padding: 15px;
+      width: 95%;
+      padding: 15px;
   }
 
   .title {
-    font-size: 1.5em;
-    margin-bottom: 15px;
+      font-size: 1.5em;
+      margin-bottom: 15px;
   }
 
   .video-wrapper {
-    width: 90%;
-    max-width: 500px;
-    aspect-ratio: 16 / 9;
+      width: 90%;
+      max-width: 500px;
+      aspect-ratio: 16 / 9;
   }
 
   .likeButton {
-    padding: 8px 16px;
-    font-size: 14px;
+      padding: 8px 16px;
+      font-size: 14px;
   }
 
   .likeCount {
-    font-size: 1em;
+      font-size: 1em;
+  }
+}
+
+/* New CSS for the side-by-side layout with explicit order */
+.watchPageContainer {
+  display: flex;
+  width: 100%;
+  max-height: 100vh; /* Ensure full viewport height */
+  padding: 20px;
+  box-sizing: border-box;
+  align-items: flex-start; /* Align items to the top vertically */
+  gap: 20px;
+  justify-content: center;
+}
+
+.videoArea {
+  display: flex;
+  align-items: flex-start; /* Align video container to the top within its area */
+  box-sizing: border-box;
+  order: 1; /* Explicitly set the order to be first */
+}
+
+.castArea {
+  max-width: fit-content; /* Adjust as needed */
+  box-sizing: border-box;
+  overflow-y: auto; /* Allows scrolling for long cast lists */
+  order: 2; /* Explicitly set the order to be second */
+}
+
+.castContainer {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 15px;
+}
+
+.castTitle {
+  font-size: 1.2em;
+  color: #333;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+.castList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.castItem {
+  display: flex;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid #f2f2f2;
+  align-items: baseline;
+  font-size: 0.9em;
+}
+
+.castItem:last-child {
+  border-bottom: none;
+}
+
+.castRole {
+  font-weight: bold;
+  color: #555;
+  min-width: 70px;
+  text-align: left;
+}
+
+.castName {
+  color: #333;
+}
+
+/* Responsive adjustments for smaller screens (stack layout) */
+@media (max-width: 768px) {
+  .watchPageContainer {
+      flex-direction: column; /* Stack video and cast */
+      padding: 10px;
+      align-items: stretch; /* Allow items to take full width */
+  }
+
+  .videoArea {
+      width: 100%;
+      padding-right: 0;
+      margin-bottom: 20px;
+      order: 0; /* Reset order for stacked layout */
+  }
+
+  .videoContainer {
+      width: 95%; /* Adjust for smaller screen */
+      margin: 0 auto 20px;
+  }
+
+  .castArea {
+      width: 100%;
+      padding-left: 0;
+      max-width: none;
+      overflow-y: auto; /* Allow scroll for long lists */
+      align-self: auto; /* Reset align-self */
+      order: 0; /* Reset order for stacked layout */
   }
 }

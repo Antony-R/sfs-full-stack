@@ -5,114 +5,189 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  /* Semi-transparent black overlay */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  /* Ensure it's on top */
+  overflow: auto;
 }
 
 .modalContent {
   background-color: #222;
-  /* Dark background */
   color: #eee;
-  /* Light text color */
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   width: 500px;
-  /* Adjust as needed */
   max-width: 90%;
-  /* For smaller screens */
+  max-height: 90%;
+  overflow-y: auto;
 }
 
 .modalContent h2 {
   color: #fff;
-  /* White heading */
   margin-bottom: 15px;
+  text-align: center;
 }
 
 .label {
   display: block;
-  /* Make labels stack on top */
   margin-bottom: 5px;
   color: #aaa;
-  /* Slightly lighter text for labels */
 }
 
 .input,
 .textarea,
 .fileInput {
-  width: calc(100% - 10px);
-  /* Full width with some padding */
+  width: calc(100% - 16px);
   padding: 8px;
   margin-bottom: 10px;
   border: 1px solid #555;
-  /* Darker border */
   background-color: #333;
-  /* Darker input background */
   color: #eee;
   border-radius: 4px;
   font: inherit;
+  box-sizing: border-box;
 }
 
 .textarea {
   height: 120px;
-  /* Adjust as needed */
   resize: vertical;
-  /* Allow vertical resizing */
+}
+
+.button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font: inherit;
+  color: white;
+  font-weight: 600;
 }
 
 .uploadButton {
   background-color: #007bff;
-  /* Primary blue */
-  color: white;
-  font: inherit;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
   margin-right: 10px;
-  transition: background-color 0.3s ease;
-  /* Smooth transition */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  /* Subtle shadow */
 }
 
 .cancelButton {
   background-color: #6c757d;
-  /* Secondary gray */
-  color: white;
-  font: inherit;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  /* Smooth transition */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  /* Subtle shadow */
 }
 
 .uploadButton:hover {
   background-color: #0056b3;
-  /* Darker blue on hover */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-  /* More prominent shadow */
 }
 
 .cancelButton:hover {
   background-color: #5a6268;
-  /* Darker gray on hover */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-  /* More prominent shadow */
 }
 
 .uploadButton:active,
 .cancelButton:active {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-  /* Smaller shadow on click */
   transform: translateY(1px);
-  /* Slight move down on click */
+}
+
+.castSection {
+  margin-bottom: 10px;
+}
+
+.castHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.castRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.castInput {
+  margin-right: 8px;
+  flex: 1;
+  box-sizing: border-box;
+}
+
+.castButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 0;
+}
+
+.castButton:hover {
+  background-color: #d0d0d0;
+  transform: scale(1.05);
+}
+
+.castButton:active {
+  background-color: #c0c0c0;
+  transform: scale(0.95);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.castButton:first-of-type {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.castButton:last-of-type {
+  background-color: #f44336;
+  color: white;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.userSearchContainer {
+  position: relative;
+  flex: 1;
+}
+
+.userDropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+  background-color: #f8f8f8;
+  box-sizing: border-box;
+}
+
+.userListItem {
+  padding: 8px;
+  cursor: pointer;
+  color: #333;
+}
+
+.userListItem:hover {
+  background-color: #e0e0e0;
 }

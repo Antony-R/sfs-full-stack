@@ -1,0 +1,102 @@
+/* me.module.css */
+/* me.module.css */
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    color: #ddd;
+}
+
+.header {
+    display: flex; /* Enable Flexbox for the header */
+    gap: 20px; /* Space between the links */
+    margin-bottom: 20px;
+}
+
+.headerLink {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ddd;
+    cursor: pointer;
+    text-decoration: none;
+    padding-bottom: 5px;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom 0.3s ease, color 0.3s ease; /* Added color transition */
+}
+
+.headerLink:hover {
+    color: #fff;
+    border-bottom-color: #28a745;
+}
+
+.headerLink.active {
+    color: #fff;
+    border-bottom-color: #28a745;
+}
+
+/* Existing styles for userDetailsContainer, userDetailsTable, profileImage, etc. remain the same */
+
+.userDetailsContainer {
+    margin-top: 20px;
+}
+
+.userDetailsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.userDetailsTable th,
+.userDetailsTable td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+}
+
+.userDetailsTable th {
+    font-weight: bold;
+    width: 150px; /* Adjust width of the key column */
+    color: #ddd;
+}
+
+.userDetailsTable td {
+    color: #eee;
+}
+
+.profileImage {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #28a745;
+    margin-top: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .container h1 {
+        font-size: 1.8em;
+    }
+
+    .userDetailsTable th {
+        width: 120px;
+    }
+
+    .userDetailsTable td {
+        font-size: 0.9em;
+    }
+
+    .profileImage {
+        width: 60px;
+        height: 60px;
+    }
+}

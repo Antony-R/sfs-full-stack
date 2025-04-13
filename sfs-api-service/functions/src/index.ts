@@ -10,10 +10,12 @@
 
 import * as functions from "firebase-functions/v1";
 import {initializeApp} from "firebase-admin/app";
-import {FieldValue, Firestore, Timestamp} from "firebase-admin/firestore";
+import {DocumentReference, FieldValue,
+  Firestore, Timestamp} from "firebase-admin/firestore";
 import * as logger from "firebase-functions/logger";
 import {Storage} from "@google-cloud/storage";
-import {CallableRequest, onCall} from "firebase-functions/v2/https";
+import {CallableRequest, HttpsError, onCall} from "firebase-functions/v2/https";
+import {UserInfo} from "firebase-admin/auth";
 
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
@@ -38,6 +40,7 @@ export interface Video {
     status?: "processing" | "processed",
     title?: string,
     description?: string,
+    cast?: Record<string, DocumentReference>;
     timestamp?: Timestamp
 }
 
@@ -123,12 +126,15 @@ export const generateUploadUrl = onCall({maxInstances: 1}, async (request) => {
 });
 
 export const getVideos = onCall({maxInstances: 1}, async (request) => {
+  const statusFilter = "processed";
   const lastVisibleId = request.data.lastVisibleId;
   const limit = 10; // Number of videos per page
   // TODO: check if orderBy is required for consistent pagination
 
   try {
-    let query = firestore.collection(videoCollectionId).limit(limit);
+    let query = firestore.collection(videoCollectionId)
+      .where("status", "==", statusFilter)
+      .limit(limit);
 
     if (lastVisibleId) {
       const lastVisibleDoc = await firestore
@@ -170,34 +176,39 @@ export const getMyUploads = onCall({maxInstances: 1}, async (request) => {
 export const submitVideoMeta = onCall({maxInstances: 1}, async (request) => {
   validateAuthentication(request);
 
-  const data = request.data;
-  const videoId = data.videoId;
-  const video: Video = data.video;
+  const data = request.data as { videoId: string; video: Video };
+  const {videoId, video} = data;
 
-  // Validate input
   if (!videoId || typeof videoId !== "string") {
-    throw new functions.https
-      .HttpsError("invalid-argument", "Video ID must be a string.");
-  }
-  if (!video || typeof video !== "object") {
-    throw new functions.https
-      .HttpsError("invalid-argument", "Video data must be an object.");
-  }
-  if (video.title && typeof video.title !== "string") {
-    throw new functions.https
-      .HttpsError("invalid-argument", "Video title must be a string.");
-  }
-  if (video.description && typeof video.description !== "string") {
-    throw new functions.https
-      .HttpsError("invalid-argument", "Video description must be a string.");
+    throw new HttpsError("invalid-argument", "Video ID must be a string.");
   }
 
-  // Update the video document in Firestore
+  if (!video || typeof video !== "object") {
+    throw new HttpsError("invalid-argument", "Video data must be an object.");
+  }
+
+  if (video.title !== undefined &&
+    typeof video.title !== "string" &&
+    video.title !== null) {
+    throw new HttpsError("invalid-argument",
+      "Video title must be a string or null.");
+  }
+
+  if (video.description !== undefined &&
+    typeof video.description !== "string" &&
+    video.description !== null) {
+    throw new HttpsError("invalid-argument",
+      "Video description must be a string or null.");
+  }
+
+  if (video.cast !== undefined && typeof video.cast !== "object") {
+    throw new HttpsError("invalid-argument", "Cast must be an object.");
+  }
+
   await firestore
     .collection(videoCollectionId)
     .doc(videoId)
     .set({...video, timestamp: FieldValue.serverTimestamp()}, {merge: true});
-  // Use merge to avoid overwriting existing data
 
   return {success: true, message: "Video metadata updated successfully."};
 });
@@ -214,4 +225,21 @@ export const getUserMeta = onCall({maxInstances: 1}, async (request) => {
   const snapshot =
     await firestore.collection(usersCollectionId).doc(userId).get();
   return snapshot.data();
+});
+
+export const getAllUsersMeta = onCall({maxInstances: 1}, async () => {
+  try {
+    const snapshot = await firestore.collection(usersCollectionId).get();
+
+    const users: UserInfo[] = [];
+
+    snapshot.forEach((doc) => {
+      users.push(doc.data() as UserInfo);
+    });
+
+    return users;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw new Error("Failed to fetch users.");
+  }
 });

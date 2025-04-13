@@ -55,7 +55,7 @@ export default function Home() {
               style={{ position: 'relative', display: 'inline-block' }}
             >
               <Image
-                src={'/thumbnail.jpg'}
+                src={'/filmthumbnail.png'}
                 alt="video"
                 width={120}
                 height={80}

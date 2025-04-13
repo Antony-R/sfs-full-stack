@@ -16,9 +16,14 @@ export default function SignIn({ user }: SignInProps) {
         <Fragment>
             {
                 user ? (
-                    <button className={styles.navbarButton} onClick={signOut}>
-                        Sign Out
-                    </button>
+                    <div className={styles.navbarButtonContainer}>
+                        <button className={`${styles.navbarButton} ${styles.navbarButtonWithDisplayName}`} onClick={signOut}>
+                            Sign Out
+                            {user.displayName && (
+                                <span className={styles.displayNameOverlay}>{user.displayName}</span>
+                            )}
+                        </button>
+                    </div>
                 ) : (
                     <button className={styles.navbarButton} onClick={signInWithGoogle}>
                         Sign In

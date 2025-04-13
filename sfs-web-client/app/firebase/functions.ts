@@ -1,7 +1,7 @@
 import {httpsCallable} from "firebase/functions";
 import {functions} from "./firebase";
-import {UserInfo} from "firebase/auth";
-import {Timestamp} from "firebase/firestore";
+import {User, UserInfo} from "firebase/auth";
+import {DocumentReference, Timestamp} from "firebase/firestore";
 
 const generateUploadUrl = httpsCallable(functions, 'generateUploadUrl');
 const getVideosCloudFunction = httpsCallable(functions, 'getVideos');
@@ -9,6 +9,7 @@ const getMyUploadsCloudFunction = httpsCallable(functions, 'getMyUploads');
 const submitVideoMetaFunction = httpsCallable(functions, 'submitVideoMeta');
 const getVideoMetaFunction = httpsCallable(functions, 'getVideoMeta');
 const getUserMetaFunction = httpsCallable(functions, 'getUserMeta');
+const getAllUsersMetaFunction = httpsCallable(functions, 'getAllUsersMeta');
 const getOrCreateChatFunction = httpsCallable(functions, 'getOrCreateChat');
 
 export interface Video {
@@ -18,6 +19,7 @@ export interface Video {
     status?: 'processing' | 'processed',
     title?: string,
     description?: string
+    cast?: Record<string, string>;
     timestamp?: Timestamp
 }
 
@@ -49,14 +51,21 @@ export async function getMyUploads() {
     return response.data as Video[];
 }
 
-export async function submitVideoMeta(videoId: string, formData: FormData) {
+export async function submitVideoMeta(
+    videoId: string,
+    title: string,
+    description: string,
+    cast?: Record<string, string>
+  ) {
     const video: Video = {
-        title: formData.get('title')?.toString(),
-        description: formData.get('description')?.toString()
-    }
-    const response = await submitVideoMetaFunction({videoId, video});
+      title: title,
+      description: description,
+      cast: cast,
+    };
+  
+    const response = await submitVideoMetaFunction({ videoId, video });
     console.log(`Video metadata update result: ${response.data}`);
-}
+  }
 
 export async function getVideoMeta(videoId: string) {
     const response = await getVideoMetaFunction({id: videoId});
@@ -66,6 +75,11 @@ export async function getVideoMeta(videoId: string) {
 export async function getUserMeta(userId: string) {
     const response = await getUserMetaFunction({id: userId});
     return response.data as UserInfo;
+}
+
+export async function getAllUsers() {
+    const response = await getAllUsersMetaFunction();
+    return response.data as User[];
 }
 
 export async function getOrCreateChat(participantUid: string) {

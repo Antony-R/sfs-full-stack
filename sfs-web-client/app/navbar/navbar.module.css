@@ -12,54 +12,115 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  align-items: center;
 }
 
 .navbarLeft {
   display: flex;
   align-items: center;
-}
-
-.navbarCenter {
-  display: flex;
-  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .navbarRight {
   display: flex;
   align-items: center;
+  justify-content: flex-end; /* Push buttons to the right */
+  gap: 1rem;
 }
 
+/* SignIn.module.css */
 .navbarButton {
   display: inline-block;
-  border: 2px solid #007bff; /* Blue border (change this) */
-  padding: 8px 16px; /* Adjusted padding - match upload button */
-  border-radius: 0; /* Remove rounded corners */ 
+  border: 2px solid #007bff;
+  padding: 8px 16px;
+  border-radius: 0;
   font-family: var(--font-manrope);
   font-size: 14px;
-  margin: 0.5rem;
+  margin-left: 0.5rem;
   font-weight: 500;
   cursor: pointer;
   text-decoration: none;
   background-color: transparent;
-  color: #007bff; /* Blue text (change this) */
+  color: #007bff;
   transition: background-color 0.3s ease, color 0.3s ease;
-}.navbarButton:hover {
-  background-color: #007bff; /* Blue background on hover (change this) */
+  white-space: nowrap;
+}
+
+.navbarButton:hover {
+  background-color: #007bff;
   color: white;
 }
 
+.navbarButtonWithDisplayName {
+  position: relative;
+}
+
+.displayNameOverlay {
+  position: absolute;
+  top: -10px; /* Adjust as needed */
+  left: 5px; /* Adjust as needed */
+  background-color: white; /* Match your background */
+  padding: 0 4px; /* Adjust padding */
+  font-size: 12px; /* Adjust font size */
+  color: #28a745; /* Match border color */
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.navbarButtonContainer {
+  position: relative;
+}
+
+.menuIcon {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.bar {
+  width: 25px;
+  height: 3px;
+  background-color: #343a40;
+  margin: 3px 0;
+  transition: 0.4s;
+}
+
+.open .bar:nth-child(1) {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+
+.open .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.open .bar:nth-child(3) {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+
 @media (max-width: 768px) {
-  .navbarContent {
-      overflow-x: auto; /* Enable horizontal scrolling */
-      white-space: nowrap; /* Prevent wrapping */
-      padding: 10px; /* Add padding */
+  .navbarRight {
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background-color: #f8f9fa;
+    display: none;
+    align-items: center;
+    padding: 10px;
+    gap: 0.5rem;
   }
 
-  .navbarLeft,
-  .navbarCenter,
-  .navbarRight {
-      display: inline-block; /* Make items inline */
-      margin-right: 10px; /* Add spacing between items */
+  .mobileMenuOpen {
+    display: flex;
   }
+
+  .menuIcon {
+    display: flex;
+  }
+
+  .navbarButton {
+    margin-left: 0; /* remove left margin for mobile */
+  }
+
 }

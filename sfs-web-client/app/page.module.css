@@ -42,10 +42,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: flex-start; /* Aligned to the start */
     margin: 10px; /* added margin to match page margins */
+    justify-content: space-around;
   }
-  
+
   .loadMoreContainer {
     display: flex;
     justify-content: center;

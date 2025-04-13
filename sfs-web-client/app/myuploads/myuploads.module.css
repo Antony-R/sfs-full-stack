@@ -5,12 +5,6 @@
     padding: 20px; /* Add some padding around the content */
 }
 
-.container h1 {
-    text-align: left; /* Center the heading */
-    margin-bottom: 20px;
-    color: #fff; /* White text for heading */
-}
-
 .uploadsTable {
     width: 100%; /* Table takes full width of its container */
     border-collapse: collapse;

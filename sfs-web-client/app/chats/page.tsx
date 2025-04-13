@@ -6,7 +6,7 @@ import { collection, query, where, getDocs, orderBy, limit } from 'firebase/fire
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getUserMeta } from '../firebase/functions';
-import styles from './page.module.css'; // Import CSS module
+import styles from './page.module.css';
 
 interface ChatItem {
     chatId: string;
@@ -16,6 +16,7 @@ interface ChatItem {
 
 export default function ChatsList() {
     const { user, loading } = useAuth();
+    const [chatsLoading, setChatsLoading] = useState(true);
     const [chats, setChats] = useState<ChatItem[]>([]);
     const router = useRouter();
 
@@ -52,6 +53,7 @@ export default function ChatsList() {
             }
 
             setChats(chatItems);
+            setChatsLoading(false);
         };
 
         fetchChats();
@@ -73,6 +75,9 @@ export default function ChatsList() {
         <div className={styles.chatsListContainer}>
             <h1 className={styles.chatsListTitle}>Your Chats</h1>
             {chats.length === 0 ? (
+                chatsLoading ? 
+                <p className={styles.noChatsMessage}>Loading chats...</p>
+                : 
                 <p className={styles.noChatsMessage}>You have no active chats.</p>
             ) : (
                 <ul className={styles.chatsList}>
